@@ -64,6 +64,7 @@ export default {
       this.l_sort_value = e;
       // .get('echart_key');
       // console.log(this.l_echart_value);
+      this.reload
     },
 
   }

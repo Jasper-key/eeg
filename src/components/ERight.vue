@@ -31,7 +31,7 @@
       <label class="ri-algorithm-run" @click="get_select_value()">启动</label>
     </div>
     <div class="ri-numbers" :style="{ color: font_colors[font_color_mark] }">
-      系统已计算 {{ items_groups }}组数据，准确率为 <span>--%</span>
+      系统已计算 {{ items_groups }}组数据，准确率为 <span>{{ count_result }}%</span>
     </div>
     <div class="ri-compare">
       <div :style="{ color: font_colors[font_color_mark + 2] }">
@@ -112,12 +112,20 @@
               { color: tri == 0 || tdi == 0 ? '#FFF' : '' },
             ]"
           >
-            {{
+            <!-- {{
               tri == 0
                 ? num_label_relation.get(tdi + 1)
                 : tdi == 0
                 ? num_label_relation.get(tri + 1)
                 : statis_result.get(tri + 1 + "" + (tdi + 1))
+            }} -->
+
+            {{
+              tri == 0
+                ? statistical_results_title[tdi]
+                : tdi == 0
+                ? statistical_results_title[tri]
+                : statis_result.get(7 - Number(tri) + "" + (7 - Number(tdi)))
             }}
           </td>
         </tr>
@@ -143,7 +151,9 @@ export default {
       font_colors: ["#3c3c3c", "#FFFFFF", "#3C3C3C", "#969696"], //文字颜色
       algorithm_data: this.$datas.algorithms, //算法数组
       select_value: "", //下拉框默认值
-      file_path: '',// 目录名称
+      file_path: "",// 目录名称
+      count_result: "--",//总的计算结果
+      statistical_results_title: ['', 'SW', 'REM', 'S1', 'S2', 'SS', 'ACC']//统计结果表格的表头, 
     };
   },
   props: {
@@ -224,11 +234,12 @@ export default {
       this.known_result = new Array();
       this.sort_label = new Array();
       this.final_results = new Map();
+      this.item_number = "";
     },
     //给已知结果、分类标签，数据分类赋值
     assignment() {
       //已知结果
-      this.known_result = this.files_resource_map.get("vi.txt");
+      this.known_result = this.files_resource_map.get(this.$datas.known_result);
 
       //遍历文件数据 files_resource_map
       //创建一个map，接收遍历后的数据
@@ -262,7 +273,7 @@ export default {
       //给项数赋值,因为在监听项数的变化，所以只能等最终值都赋完后才能给初始化项数
       this.item_number = 1;
     },
-    //初始化 数字-标签对应关系
+    //初始化 数字-标签对应关系,6-SW,5-REM,4-S1,3-S2,2-SS。
     init_relation() {
       this.num_label_relation.set(2, "SS");
       this.num_label_relation.set(3, "S2");
@@ -288,6 +299,12 @@ export default {
           count_sort.set(temp_key, 1);
         }
       });
+
+      // 全局总数
+      let global_total = 0;
+      // 正确总数
+      let correct_total = 0;
+
       // 计算百分比
       for (var j = 2; j <= 6; j++) {
         //分子：结果和标签都能对上
@@ -296,18 +313,29 @@ export default {
         let total = 0;
         for (var k = 2; k <= 6; k++) {
           let temp_count = count_sort.get(j.toString() + k.toString());
+          // 每种类型的数量
           if (!isNaN(temp_count)) {
             total += temp_count;
           }
+          //正确值的数量
           if (j == k && !isNaN(temp_count)) {
+            //每种类型正确的数量
             numerator = count_sort.get(j.toString() + k.toString());
+            //全部正确值的数量
+            correct_total += numerator;
           }
         }
+        //相加全部数量
+        global_total += total;
         //计算
-        let count = Math.round((numerator / total) * 10000) / 100.0;
-        count_sort.set(j.toString() + 7, count);
+        let count = (Math.round((numerator / total) * 10000) / 100.0).toFixed(0);
+        // 设置每种类型的正确路
+        count_sort.set(j.toString() + 1, count);
       }
+      // 统计结果赋值
       this.statis_result = count_sort;
+      // 计算全局正确率
+      this.count_result = (Math.round((correct_total / global_total) * 10000) / 100.0).toFixed(2);
     },
     get_select_value() {
       if (this.select_value == "") {
@@ -330,6 +358,7 @@ export default {
     item_number: {
       deep: true,
       handler(newValue) {
+
         let echart_value = this.final_results.get(newValue.toString());
         if (typeof echart_value != "undefined") {
           echart_value.set("echart_key", newValue);

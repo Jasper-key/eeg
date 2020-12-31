@@ -31,7 +31,8 @@
       <label class="ri-algorithm-run" @click="get_select_value()">启动</label>
     </div>
     <div class="ri-numbers" :style="{ color: font_colors[font_color_mark] }">
-      系统已计算 {{ items_groups }}组数据，准确率为 <span>{{ count_result }}%</span>
+      系统已计算 {{ items_groups }}组数据，准确率为
+      <span>{{ count_result }}%</span>
     </div>
     <div class="ri-compare">
       <div :style="{ color: font_colors[font_color_mark + 2] }">
@@ -151,9 +152,10 @@ export default {
       font_colors: ["#3c3c3c", "#FFFFFF", "#3C3C3C", "#969696"], //文字颜色
       algorithm_data: this.$datas.algorithms, //算法数组
       select_value: "", //下拉框默认值
-      file_path: "",// 目录名称
-      count_result: "--",//总的计算结果
-      statistical_results_title: ['', 'SW', 'REM', 'S1', 'S2', 'SS', 'ACC']//统计结果表格的表头, 
+      file_path: "", // 目录名称
+      count_result: "--", //总的计算结果
+      statistical_results_title: ["", "SW", "REM", "S1", "S2", "SS", "ACC"], //统计结果表格的表头,
+      
     };
   },
   props: {
@@ -207,7 +209,6 @@ export default {
       }
       //赋值
       this.assignment();
-
     },
     up() {
       if (this.item_number == "") {
@@ -216,6 +217,8 @@ export default {
         this.item_number = Number(this.item_number) + 1;
         // resources.set("item_number", this.item_number);
         // this.$emit("resources", resources);
+      }else {
+        alert('最多只有 ' + this.items_groups + ' 组数据！！！');
       }
     },
     under() {
@@ -238,15 +241,36 @@ export default {
     },
     //给已知结果、分类标签，数据分类赋值
     assignment() {
-      //已知结果
-      this.known_result = this.files_resource_map.get(this.$datas.known_result);
-
+      // 老代码 20201231前
+      // this.known_result = this.files_resource_map.get(this.$datas.known_result);
+      // 已知结果。结果1要加1
+      let temp_known_result_array = this.files_resource_map.get(
+        this.$datas.known_result
+      );
+      // 遍历
+      let temp_known_result_fotEach = new Array();
+      temp_known_result_array.forEach(function(value) {
+        if (value == "1") {
+          temp_known_result_fotEach.push((Number(value) + 1).toString());
+        } else {
+          temp_known_result_fotEach.push(value);
+        }
+      });
+      this.known_result = temp_known_result_fotEach;
       //遍历文件数据 files_resource_map
       //创建一个map，接收遍历后的数据
       let temp_resource_map = new Map();
+      // 标签名
+      let temp_marks = this.$datas.mark_7;
+      console.log(this.$datas.mark_7);
       this.files_resource_map.forEach(function(value, key) {
-        // 获取文件名前四位字符
-        let temp_key = Number(key.substring(0, 4));
+        // 获取文件名前四位字符 老代码 20201231 前
+        // let temp_key = Number(key.substring(0, 4));
+        let temp_key = key;
+        temp_marks.forEach(function(mark_value) {
+          temp_key = temp_key.replace(mark_value, '');
+        });
+        temp_key = Number(temp_key);
         //判断字符是否为数字
         if (!isNaN(temp_key)) {
           //同组数据前四位字符都是同样的数值，且转成数字后可作排序，将此数字作为key，value为同组数据的map,一起存入大map中，再将key作为存入数组的先后顺序，自此，项数就可以对应组数
@@ -328,27 +352,42 @@ export default {
         //相加全部数量
         global_total += total;
         //计算
-        let count = (Math.round((numerator / total) * 10000) / 100.0).toFixed(0);
+        let count = (Math.round((numerator / total) * 10000) / 100.0).toFixed(
+          0
+        );
         // 设置每种类型的正确路
         count_sort.set(j.toString() + 1, count);
       }
       // 统计结果赋值
       this.statis_result = count_sort;
       // 计算全局正确率
-      this.count_result = (Math.round((correct_total / global_total) * 10000) / 100.0).toFixed(2);
+      this.count_result = (
+        Math.round((correct_total / global_total) * 10000) / 100.0
+      ).toFixed(2);
     },
     get_select_value() {
       if (this.select_value == "") {
         alert("请选择算法！");
       } else if (this.known_result.length == 0) {
         alert("请选择目录！");
-      } else if(typeof(this.files_resource_map.get(this.select_value)) == 'undefined'){
+      } else if (
+        typeof this.files_resource_map.get(this.select_value) == "undefined"
+      ) {
         alert("此算法对应的文件不存在！");
-      }else {
-        //分类标签
-        this.sort_label = this.files_resource_map.get(this.select_value);
-              //计算统计结果
-      this.count_statis_result();
+      } else {
+        //分类标签.老代码 20201231前
+        // this.sort_label = this.files_resource_map.get(this.select_value);
+        //分类标签，每个值+1
+        let temp_sort_label = this.files_resource_map.get(this.select_value);
+        let temp_sort_label_forEach = new Array();
+        temp_sort_label.forEach(function(value) {
+          temp_sort_label_forEach.push((Number(value) + 1).toString());
+        });
+        //赋值
+        this.sort_label = temp_sort_label_forEach;
+
+        //计算统计结果
+        this.count_statis_result();
         this.$emit("r_sort_label", this.sort_label);
       }
     },
@@ -358,7 +397,6 @@ export default {
     item_number: {
       deep: true,
       handler(newValue) {
-
         let echart_value = this.final_results.get(newValue.toString());
         if (typeof echart_value != "undefined") {
           echart_value.set("echart_key", newValue);

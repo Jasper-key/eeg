@@ -8,9 +8,9 @@
       <div>
         <b>
           All
-          <br>
+          <br />
           Category
-          <br>
+          <br />
           Labels
         </b>
       </div>
@@ -54,7 +54,11 @@ export default {
       let bChart = this.$echarts.init(document.getElementById("b-echart"));
       // 绘制图表
       bChart.setOption({
-        color: ["#96D700", "#FF0000"],
+        color: ["#96D700", "rgb(187, 72, 90)"],
+        tooltip: {
+          trigger: 'axis',
+          formatter: '当前组数为：{b}'
+        },
         legend: {
           type: "plain",
           itemHeight: 15,
@@ -76,6 +80,15 @@ export default {
             },
           ],
         },
+        dataZoom: [
+          {
+            type: "inside",
+            // realtime: true,
+            start: 0,
+            end: 100,
+            minSpan: 10,
+          },
+        ],
         grid: {
           top: 0,
           left: "5%",
@@ -164,7 +177,7 @@ export default {
             data: this.b_sort_data,
             type: "line",
             lineStyle: {
-              color: "#FF0000",
+              color: "rgb(187, 72, 90)",
             },
             showSymbol: false,
           },
@@ -224,6 +237,5 @@ export default {
   height: 7vh;
   margin-left: 5%;
   background-color: #444549;
-
 }
 </style>

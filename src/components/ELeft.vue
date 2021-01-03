@@ -7,7 +7,9 @@
         <!-- <span class="line-point">
           <span class="left-point">◽</span>
         </span> -->
-        <span class="l-b-text" :style="{color:font_colors[font_color_mark]}"><b>{{ left_title_data[k - 1] }}</b></span>
+        <span class="l-b-text" :style="{ color: font_colors[font_color_mark] }"
+          ><b>{{ left_title_data[k - 1] }}</b></span
+        >
       </div>
     </div>
     <div class="l-right" id="l-right"></div>
@@ -20,15 +22,15 @@ export default {
   data() {
     return {
       left_title_data: this.$datas.mark_7,
-      font_colors: ['#3c3c3c', '#FFFFFF']
+      font_colors: ["#3c3c3c", "#FFFFFF"],
     };
   },
   props: {
     l_echart_data: Map,
-    font_color_mark: Number,//字体颜色标记
+    font_color_mark: Number, //字体颜色标记
   },
   mounted() {
-    this.font_color_mark = 0
+    this.font_color_mark = 0;
     // this.drawLine();
     // console.log(this.$datas.mark_7);
   },
@@ -36,8 +38,10 @@ export default {
     // 检测key值是否变化
     l_echart_data: {
       deep: true,
-      handler(newValue) {
-        console.log(newValue);
+      handler() {
+        console.log("left------------");
+        console.log(this.l_echart_data);
+        console.log("3333333333333333");
         this.drawLine();
       },
     },
@@ -53,6 +57,18 @@ export default {
     option_data() {
       // 获取Map数据
       let option_echart_data = this.l_echart_data;
+      // 统计 map数据有多少条，少于7条数据，用marks
+      let temp_oed_num = 0;
+      option_echart_data.forEach(function() {
+        temp_oed_num += 1;
+      });
+      if (temp_oed_num - 1 < 7) {
+        this.left_title_data = this.$datas.mark_1;
+      } else {
+        this.left_title_data = this.$datas.mark_7;
+      }
+      console.log("num-----++++");
+      console.log(temp_oed_num);
       //获取key
       var option_key = option_echart_data.get("echart_key");
       // key前面加0
@@ -71,6 +87,7 @@ export default {
       }
       // 数据源，需要和key组合
       let option_title = this.left_title_data;
+      console.log("组合 ----" + this.left_title_data);
       let grid_top = 4.5;
       //grid数组，命名后面加S，其他数组同理
       let grid_arr = new Array();
@@ -124,8 +141,8 @@ export default {
           },
           axisLine: {
             lineStyle: {
-              color: "#A3A3A3"
-            }
+              color: "#A3A3A3",
+            },
           },
           scale: true,
         };
@@ -147,6 +164,7 @@ export default {
         };
         series_arr.push(series_temp);
       }
+      // 增加底色
       let grid_color = {
         left: "5%",
         right: 0,
@@ -157,11 +175,66 @@ export default {
         backgroundColor: "#525252",
       };
       grid_arr.push(grid_color);
+      // 放大缩小功能
+      let dataZoom_arr = [
+        {
+          type: "inside",
+          // realtime: true,
+          start: 0,
+          end: 100,
+          minSpan: 10,
+          xAxisIndex: [0, 1, 2, 3, 4, 5, 6, 7],
+        },
+      ];
+
+      // test
+      let xAxis_temp = {
+        gridIndex: 7,
+        type: "category",
+        // axisLine: false,
+        data: this.categoryNumber(),
+        // inverse: false,
+        position: "top",
+        axisLine: {
+          onZero: false,
+        },
+        axisTick: {
+          show: true,
+          interval: 500,
+          inside: true,
+          length: 10,
+          lineStyle: {
+            color: "#979797",
+          },
+        },
+        splitLine: {
+          show: true,
+          interval: 500,
+          lineStyle: {
+            type: "dashed",
+            color: "#979797",
+          },
+        },
+      };
+      xAxis_arr.push(xAxis_temp);
+
+      let yAxis_temp = {
+        gridIndex: 7,
+        type: "value",
+        offset: 0,
+        // axisLine: false,
+        splitLine: false,
+
+        scale: false,
+      };
+      yAxis_arr.push(yAxis_temp);
+
       return {
         grid: grid_arr,
         xAxis: xAxis_arr,
         yAxis: yAxis_arr,
         series: series_arr,
+        dataZoom: dataZoom_arr,
       };
     },
     categoryNumber() {

@@ -262,7 +262,12 @@ export default {
       let temp_resource_map = new Map();
       // 标签名
       let temp_marks = this.$datas.mark_7;
-      console.log(this.$datas.mark_7);
+      // 追加标签名数组
+      let temp_mark = this.$datas.mark_1;
+      temp_mark.forEach(function(value){
+        temp_marks.push(value)
+      });
+      console.log(temp_marks);
       this.files_resource_map.forEach(function(value, key) {
         // 获取文件名前四位字符 老代码 20201231 前
         // let temp_key = Number(key.substring(0, 4));
@@ -286,6 +291,7 @@ export default {
         }
       });
       this.final_results = temp_resource_map;
+      console.log(this.final_results);
       //记录组数
       let temp_number = 0;
       temp_resource_map.forEach(function() {

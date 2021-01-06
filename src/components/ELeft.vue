@@ -39,10 +39,8 @@ export default {
     l_echart_data: {
       deep: true,
       handler() {
-        console.log("left------------");
-        console.log(this.l_echart_data);
-        console.log("3333333333333333");
         this.drawLine();
+        console.log(this.l_echart_data);
       },
     },
   },
@@ -57,18 +55,16 @@ export default {
     option_data() {
       // 获取Map数据
       let option_echart_data = this.l_echart_data;
-      // 统计 map数据有多少条，少于7条数据，用marks
+      // 统计 map数据有多少条，少于7条数据，用mark_1
       let temp_oed_num = 0;
       option_echart_data.forEach(function() {
         temp_oed_num += 1;
       });
-      if (temp_oed_num - 1 < 7) {
+      if (temp_oed_num - 1 != 7) {
         this.left_title_data = this.$datas.mark_1;
       } else {
         this.left_title_data = this.$datas.mark_7;
       }
-      console.log("num-----++++");
-      console.log(temp_oed_num);
       //获取key
       var option_key = option_echart_data.get("echart_key");
       // key前面加0
@@ -87,7 +83,6 @@ export default {
       }
       // 数据源，需要和key组合
       let option_title = this.left_title_data;
-      console.log("组合 ----" + this.left_title_data);
       let grid_top = 4.5;
       //grid数组，命名后面加S，其他数组同理
       let grid_arr = new Array();
@@ -97,6 +92,10 @@ export default {
       for (var i = 0; i < 7; i++) {
         //文件的全名
         let fullName = option_key + option_title[i];
+        // 有些文件前面是4个0，判断全名是否为undi，是就增加一个0
+        if(typeof(option_echart_data.get(fullName)) == 'undefined'){
+          fullName = '0' + fullName;
+        }
         let grid_temp = {
           left: "5%",
           right: 0,
@@ -169,7 +168,7 @@ export default {
         left: "5%",
         right: 0,
         height: "100%",
-        width: "100%",
+        width: "95%",
         top: 0,
         show: true,
         backgroundColor: "#525252",
@@ -215,6 +214,7 @@ export default {
             color: "#979797",
           },
         },
+        boundaryGap: false,
       };
       xAxis_arr.push(xAxis_temp);
 
@@ -285,8 +285,5 @@ export default {
   margin: 0 10%;
   background-color: #006ed1;
   vertical-align: middle;
-}
-.l-b-text {
-  /* color: #3c3c3c; */
 }
 </style>

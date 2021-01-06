@@ -181,7 +181,9 @@ export default {
             }
           });
           let map_temp = new Array();
-          map_temp.push(e[i].name.replace(".dat", ""));
+          let temp_e = e[i].name.replace(".dat", "");
+          temp_e = temp_e.replace(".txt", "");
+          map_temp.push(temp_e);
           map_temp.push(snsArr);
           resolve(map_temp);
         };
@@ -210,7 +212,7 @@ export default {
       //赋值
       this.assignment();
     },
-    up() {
+    under() {
       if (this.item_number == "") {
         alert("请选择目录");
       } else if (this.item_number < this.items_groups) {
@@ -221,7 +223,7 @@ export default {
         alert('最多只有 ' + this.items_groups + ' 组数据！！！');
       }
     },
-    under() {
+    up() {
       if (this.item_number == "") {
         alert("请选择目录");
       } else if (Number(this.item_number) != 1) {
@@ -267,7 +269,6 @@ export default {
       temp_mark.forEach(function(value){
         temp_marks.push(value)
       });
-      console.log(temp_marks);
       this.files_resource_map.forEach(function(value, key) {
         // 获取文件名前四位字符 老代码 20201231 前
         // let temp_key = Number(key.substring(0, 4));
@@ -291,6 +292,7 @@ export default {
         }
       });
       this.final_results = temp_resource_map;
+      console.log('====');
       console.log(this.final_results);
       //记录组数
       let temp_number = 0;

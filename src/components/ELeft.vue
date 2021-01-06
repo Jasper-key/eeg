@@ -31,6 +31,7 @@ export default {
   },
   mounted() {
     this.font_color_mark = 0;
+
     // this.drawLine();
     // console.log(this.$datas.mark_7);
   },
@@ -92,8 +93,8 @@ export default {
         //文件的全名
         let fullName = option_key + option_title[i];
         // 有些文件前面是4个0，判断全名是否为undi，是就增加一个0
-        if(typeof(option_echart_data.get(fullName)) == 'undefined'){
-          fullName = '0' + fullName;
+        if (typeof option_echart_data.get(fullName) == "undefined") {
+          fullName = "0" + fullName;
         }
         let grid_temp = {
           left: "5%",

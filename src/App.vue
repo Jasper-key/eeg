@@ -1,78 +1,101 @@
 <template>
-  <div id="app" :style="{'background-color':bg_color[color_mark],'color': font_color[color_mark]}">
+  <div
+    id="app"
+    :style="{
+      'background-color': bg_color[color_mark],
+      color: font_color[color_mark],
+    }"
+  >
     <!-- <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/> -->
 
     <!-- --------------------------------panney------------------------------------------ -->
     <div class="e-title">
-      <e-title @color_switch='modify_bg'></e-title>
+      <e-title @color_switch="modify_bg"></e-title>
     </div>
     <div class="e-left">
-      <e-left :l_echart_data="l_echart_value" :font_color_mark="color_mark"></e-left>
+      <e-left
+        :l_echart_data="l_echart_value"
+        :font_color_mark="color_mark"
+      ></e-left>
     </div>
     <div class="e-right">
-      <e-right @r_echart="r_echart_func" @r_known_label="r_known_func" @r_sort_label="r_sort_func" :font_color_mark="color_mark" :r_item_value="r_item_value"></e-right>
+      <e-right
+        @r_echart="r_echart_func"
+        @r_known_label="r_known_func"
+        @r_sort_label="r_sort_func"
+        :font_color_mark="color_mark"
+        :r_item_value="r_item_value"
+      ></e-right>
     </div>
     <div class="e-bottom">
-      <e-bottom :b_echart_data="l_echart_value" :b_known_data="l_known_value" :b_sort_data="l_sort_value" @b_set_item_num="set_item_num"></e-bottom>
+      <e-bottom
+        :b_echart_data="l_echart_value"
+        :b_known_data="l_known_value"
+        :b_sort_data="l_sort_value"
+        @b_set_item_num="set_item_num"
+      ></e-bottom>
     </div>
   </div>
 </template>
 
 <script>
-import EBottom from './components/EBottom.vue';
-import ELeft from './components/ELeft.vue';
-import ERight from './components/ERight.vue';
-import ETitle from './components/ETitle.vue'
+import EBottom from "./components/EBottom.vue";
+import ELeft from "./components/ELeft.vue";
+import ERight from "./components/ERight.vue";
+import ETitle from "./components/ETitle.vue";
 // import HelloWorld from './components/HelloWorld.vue'
 
+
 export default {
-  name: 'App',
+  name: "App",
   components: {
     ETitle,
     ELeft,
     ERight,
-    EBottom
+    EBottom,
     // HelloWorld,
+  },
+  mounted() {
+
   },
   data() {
     return {
-      bg_color: ['#F6F6F6','#27292E'],
-      font_color: ['#23252A', '#fff'],
+      bg_color: ["#F6F6F6", "#27292E"],
+      font_color: ["#23252A", "#fff"],
       color_mark: 0,
-      l_echart_value: new Map(),//左侧图表数据,
-      l_known_value: new Array(),//已知结果
-      l_sort_value: new Array(),//计算标签
-      r_item_value: new Number(),// 传给项数的值
-    }
+      l_echart_value: new Map(), //左侧图表数据,
+      l_known_value: new Array(), //已知结果
+      l_sort_value: new Array(), //计算标签
+      r_item_value: new Number(), // 传给项数的值
+    };
   },
   methods: {
     modify_bg(e) {
       //将颜色标记赋值给color_mark
       this.color_mark = e;
     },
-    r_echart_func(e){
+    r_echart_func(e) {
       this.l_echart_value = e;
       // .get('echart_key');
       // console.log(this.l_echart_value);
     },
-    r_known_func(e){
+    r_known_func(e) {
       this.l_known_value = e;
       // .get('echart_key');
       // console.log(this.l_echart_value);
     },
-    r_sort_func(e){
+    r_sort_func(e) {
       this.l_sort_value = e;
       // .get('echart_key');
       // console.log(this.l_echart_value);
-      this.reload
+      this.reload;
     },
     set_item_num(e) {
       this.r_item_value = e;
-    }
-
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
@@ -82,7 +105,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
   /* color: #2c3e50; */
-  
+
   /* margin-top: 60px; */
   /* ------panney--------- */
   display: flex;
@@ -111,5 +134,8 @@ export default {
   position: absolute;
   bottom: 0;
   background-color: bg_color;
+}
+#nprogress .bar {
+  background: red !important;
 }
 </style>

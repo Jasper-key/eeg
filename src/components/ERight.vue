@@ -136,6 +136,9 @@
 </template>
 
 <script>
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+
 export default {
   name: "ERight",
   data() {
@@ -155,7 +158,6 @@ export default {
       file_path: "", // 目录名称
       count_result: "--", //总的计算结果
       statistical_results_title: ["", "SW", "REM", "S1", "S2", "SS", "ACC"], //统计结果表格的表头,
-      
     };
   },
   props: {
@@ -164,6 +166,7 @@ export default {
   },
   mounted() {
     this.font_color_mark = 0;
+    
   },
   created: function() {
     this.init_relation();
@@ -204,14 +207,21 @@ export default {
       //目录赋值给常量
       this.file_path = file_path_temp;
       this.clean_const();
-
+      //加载进度条
+      NProgress.start();
+      // 进度条自动增长
+      NProgress.inc();
       //读取文件内容，并复制给常量
       for (let i = 0; i < files_source_temp.length; i++) {
         const result_temp = await this.recursion(files_source_temp, i);
         this.files_resource_map.set(result_temp[0], result_temp[1]);
       }
-      //赋值
-      this.assignment();
+      //进度条 赋值
+      let NProgress_value = this.assignment();
+      //assignment函数加载完就可以把进度条调为1
+      NProgress.set(NProgress_value);
+      // 关闭进度条
+      NProgress.done();
     },
     under() {
       if (this.item_number == "") {
@@ -220,8 +230,8 @@ export default {
         this.item_number = Number(this.item_number) + 1;
         // resources.set("item_number", this.item_number);
         // this.$emit("resources", resources);
-      }else {
-        alert('最多只有 ' + this.items_groups + ' 组数据！！！');
+      } else {
+        alert("最多只有 " + this.items_groups + " 组数据！！！");
       }
     },
     up() {
@@ -267,15 +277,15 @@ export default {
       let temp_marks = this.$datas.mark_7;
       // 追加标签名数组
       let temp_mark = this.$datas.mark_1;
-      temp_mark.forEach(function(value){
-        temp_marks.push(value)
+      temp_mark.forEach(function(value) {
+        temp_marks.push(value);
       });
       this.files_resource_map.forEach(function(value, key) {
         // 获取文件名前四位字符 老代码 20201231 前
         // let temp_key = Number(key.substring(0, 4));
         let temp_key = key;
         temp_marks.forEach(function(mark_value) {
-          temp_key = temp_key.replace(mark_value, '');
+          temp_key = temp_key.replace(mark_value, "");
         });
         temp_key = Number(temp_key);
         //判断字符是否为数字
@@ -303,6 +313,7 @@ export default {
       //给组数赋值
       //给项数赋值,因为在监听项数的变化，所以只能等最终值都赋完后才能给初始化项数
       this.item_number = 1;
+      return 1
     },
     //初始化 数字-标签对应关系,6-SW,5-REM,4-S1,3-S2,2-SS。
     init_relation() {
@@ -416,8 +427,8 @@ export default {
       deep: true,
       handler(newValue) {
         this.item_number = newValue;
-      }
-    }
+      },
+    },
     // file_path: {
     //   deep: true,
     //   handler() {

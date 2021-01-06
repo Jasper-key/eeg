@@ -160,6 +160,7 @@ export default {
   },
   props: {
     font_color_mark: Number,
+    r_item_value: Number, // 底部图标传过来的项数值
   },
   mounted() {
     this.font_color_mark = 0;
@@ -292,8 +293,6 @@ export default {
         }
       });
       this.final_results = temp_resource_map;
-      console.log('====');
-      console.log(this.final_results);
       //记录组数
       let temp_number = 0;
       temp_resource_map.forEach(function() {
@@ -413,6 +412,12 @@ export default {
         }
       },
     },
+    r_item_value: {
+      deep: true,
+      handler(newValue) {
+        this.item_number = newValue;
+      }
+    }
     // file_path: {
     //   deep: true,
     //   handler() {

@@ -11,10 +11,10 @@
       <e-left :l_echart_data="l_echart_value" :font_color_mark="color_mark"></e-left>
     </div>
     <div class="e-right">
-      <e-right @r_echart="r_echart_func" @r_known_label="r_known_func" @r_sort_label="r_sort_func" :font_color_mark="color_mark"></e-right>
+      <e-right @r_echart="r_echart_func" @r_known_label="r_known_func" @r_sort_label="r_sort_func" :font_color_mark="color_mark" :r_item_value="r_item_value"></e-right>
     </div>
     <div class="e-bottom">
-      <e-bottom :b_echart_data="l_echart_value" :b_known_data="l_known_value" :b_sort_data="l_sort_value"></e-bottom>
+      <e-bottom :b_echart_data="l_echart_value" :b_known_data="l_known_value" :b_sort_data="l_sort_value" @b_set_item_num="set_item_num"></e-bottom>
     </div>
   </div>
 </template>
@@ -43,6 +43,7 @@ export default {
       l_echart_value: new Map(),//左侧图表数据,
       l_known_value: new Array(),//已知结果
       l_sort_value: new Array(),//计算标签
+      r_item_value: new Number(),// 传给项数的值
     }
   },
   methods: {
@@ -66,6 +67,9 @@ export default {
       // console.log(this.l_echart_value);
       this.reload
     },
+    set_item_num(e) {
+      this.r_item_value = e;
+    }
 
   }
 }

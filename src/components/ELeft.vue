@@ -40,7 +40,6 @@ export default {
       deep: true,
       handler() {
         this.drawLine();
-        console.log(this.l_echart_data);
       },
     },
   },

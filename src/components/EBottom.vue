@@ -15,15 +15,19 @@
         </b>
       </div>
     </div>
-    <div class="b-echart" id="b-echart"></div>
+    <div class="b-echart" id="b-echart" @click="mousedown"></div>
   </div>
 </template>
 
 <script>
+let item_num_value = 0;
+
 export default {
   name: "EBottom",
   data() {
-    return {};
+    return {
+      b_item_num_value: item_num_value,
+    };
   },
   props: {
     b_known_data: Array,
@@ -47,17 +51,51 @@ export default {
         this.drawEchart();
       },
     },
+    b_item_num_value: {
+      deep: true,
+      handler() {
+        console.log("11");
+        // this.$emit("b_set_item_num", newValue);
+      },
+    },
   },
   methods: {
     drawEchart() {
       // 基于准备好的dom，初始化echarts实例
       let bChart = this.$echarts.init(document.getElementById("b-echart"));
+
+      // bChart.on("click", function(params) {
+      //   // 因为x是category，所以name代表x的值，x值又代表数据的组数。把此值传入项数中
+      //   console.log(this.b_item_num_value);
+      //   let set_value = params.name;
+      //   console.log(set_value);
+      //   // let data = {
+      //   //   x: params.name,
+      //   //   y: params.value
+      //   // }
+      //   // console.log(data)
+      //   // alert(JSON.stringify(data))
+      //   // window.webkit.messageHandlers.iOSObj.postMessage(data)
+      // });
+
       // 绘制图表
       bChart.setOption({
         color: ["#96D700", "rgb(187, 72, 90)"],
         tooltip: {
-          trigger: 'axis',
-          formatter: '当前组数为：{b}'
+          trigger: "axis",
+          // formatter: "当前组数为：{b}",
+          formatter: function(params) {
+            var html = "";
+            if (params.length > 0) {
+              item_num_value = params[0].dataIndex + 1;
+              // for (var int = 0; int < params.length; int++) {
+              //   html +=
+              //     params[int].seriesName + ":" + params[int].data + "<br>";
+              // }
+              html = "当前组数为：" + (params[0].dataIndex + 1);
+            }
+            return html;
+          },
         },
         legend: {
           type: "plain",
@@ -107,6 +145,7 @@ export default {
           nameTextStyle: {
             padding: [0, 0, -25, -32],
             fontSize: 9,
+            color: "rgb(150, 150, 150)",
           },
           axisTick: {
             inside: true,
@@ -118,6 +157,7 @@ export default {
             showMaxLabel: false,
             showMinLabel: false,
             interval: parseInt(this.b_known_data.length / 8),
+            color: "rgb(150, 150, 150)",
           },
         },
         yAxis: {
@@ -184,6 +224,9 @@ export default {
         ],
       });
     },
+    set_value(e) {
+      alert(e);
+    },
     countNumber(e) {
       var filled = Array.from(Array(e), (v, k) => k + 1);
       return filled;
@@ -196,6 +239,11 @@ export default {
         tempNumber.push(p);
       }
       return tempNumber;
+    },
+    mousedown: function() {
+      if( item_num_value != 0){
+        this.$emit('b_set_item_num', item_num_value);
+      }
     },
   },
 };

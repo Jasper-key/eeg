@@ -4,9 +4,9 @@
     "mark_1": ["Pz-Oz"],
     "mark_color": ["#FFD258", "#FFD258", "#FFFFFF", "#00FF5C", "#00FF5C", "#00E1FF", "#00E1FF"],
     "algorithms": [
-        ["算法一", "one_result.txt"],
-        ["算法二", "two_result.txt"],
-        ["算法三", "three_result.txt"]
+        ["算法一", "one_result"],
+        ["算法二", "two_result"],
+        ["算法三", "three_result"]
     ],
     "known_result": "vi"
 }

@@ -61,7 +61,7 @@ export default {
         temp_oed_num += 1;
       });
       if (temp_oed_num - 1 != 7) {
-        this.left_title_data = this.$datas.mark_1;
+        this.left_title_data = this.$datas.marks;
       } else {
         this.left_title_data = this.$datas.mark_7;
       }

@@ -216,6 +216,7 @@ export default {
         const result_temp = await this.recursion(files_source_temp, i);
         this.files_resource_map.set(result_temp[0], result_temp[1]);
       }
+
       //进度条 赋值
       let NProgress_value = this.assignment();
       //assignment函数加载完就可以把进度条调为1
@@ -261,22 +262,22 @@ export default {
         this.$datas.known_result
       );
       // 遍历
-      let temp_known_result_fotEach = new Array();
+      let temp_known_result_fotE = new Array();
       temp_known_result_array.forEach(function(value) {
         if (value == "1") {
-          temp_known_result_fotEach.push((Number(value) + 1).toString());
+          temp_known_result_fotE.push((Number(value) + 1).toString());
         } else {
-          temp_known_result_fotEach.push(value);
+          temp_known_result_fotE.push(value);
         }
       });
-      this.known_result = temp_known_result_fotEach;
+      this.known_result = temp_known_result_fotE;
       //遍历文件数据 files_resource_map
       //创建一个map，接收遍历后的数据
       let temp_resource_map = new Map();
       // 标签名
       let temp_marks = this.$datas.mark_7;
       // 追加标签名数组
-      let temp_mark = this.$datas.mark_1;
+      let temp_mark = this.$datas.marks;
       temp_mark.forEach(function(value) {
         temp_marks.push(value);
       });

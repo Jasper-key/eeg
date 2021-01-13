@@ -264,10 +264,10 @@ export default {
       // 遍历
       let temp_known_result_fotE = new Array();
       temp_known_result_array.forEach(function(value) {
-        if (value == "1") {
+        if (Number(value) == "1") {
           temp_known_result_fotE.push((Number(value) + 1).toString());
         } else {
-          temp_known_result_fotE.push(value);
+          temp_known_result_fotE.push(Number(value));
         }
       });
       this.known_result = temp_known_result_fotE;
@@ -374,6 +374,9 @@ export default {
         let count = (Math.round((numerator / total) * 10000) / 100.0).toFixed(
           0
         );
+        if (isNaN(count)){
+           count = 0;
+        }
         // 设置每种类型的正确路
         count_sort.set(j.toString() + 1, count);
       }

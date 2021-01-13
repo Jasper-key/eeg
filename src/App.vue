@@ -121,6 +121,7 @@ export default {
 .e-left {
   width: 80%;
   height: 67vh;
+  margin-top: 1px;
   background-color: bg_color;
 }
 .e-right {

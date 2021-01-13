@@ -83,7 +83,7 @@ export default {
       }
       // 数据源，需要和key组合
       let option_title = this.left_title_data;
-      let grid_top = 4.5;
+      let grid_top = 2;
       //grid数组，命名后面加S，其他数组同理
       let grid_arr = new Array();
       let xAxis_arr = new Array();
@@ -99,7 +99,7 @@ export default {
         let grid_temp = {
           left: "5%",
           right: 0,
-          height: "5%",
+          height: "10%",
           top: grid_top + "%",
         };
         grid_arr.push(grid_temp);
@@ -120,10 +120,12 @@ export default {
           gridIndex: i,
           type: "value",
           offset: 10,
+          min: -this.$datas.unit_number[i],
+          max: this.$datas.unit_number[i],
           // axisLine: false,
           splitLine: false,
           // Y轴name
-          name: this.$datas.unit_numnwe[i] + "μV",
+          name: this.$datas.unit_number[i] + "μV",
           nameTextStyle: {
             color: "#A3A3A3",
             fontWeight: 100,

@@ -111,7 +111,7 @@ export default {
           gridIndex: i,
           type: "category",
           axisLine: false,
-          data: this.categoryNumber(),
+          data: this.categoryNumberHz(this.$datas.hz_num[i]),
         };
         xAxis_arr.push(xAxis_temp);
 
@@ -120,8 +120,8 @@ export default {
           gridIndex: i,
           type: "value",
           offset: 10,
-          min: -this.$datas.unit_number[i],
-          max: this.$datas.unit_number[i],
+          min: -(this.$datas.unit_number[i] / 2),
+          max: this.$datas.unit_number[i] / 2,
           // axisLine: false,
           splitLine: false,
           // Y轴name
@@ -241,6 +241,11 @@ export default {
     },
     categoryNumber() {
       var filled = Array.from(Array(3000), (v, k) => k + 1);
+      return filled;
+    },
+    // 100HZ的点数是3000，按照开放的Hz值来动态设置通道的点数
+    categoryNumberHz(e) {
+      var filled = Array.from(Array(30 * e), (v, k) => k + 1);
       return filled;
     },
   },

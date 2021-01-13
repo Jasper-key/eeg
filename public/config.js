@@ -9,5 +9,6 @@ window.globals = {
         ["算法三", "three_result"]
     ],
     "known_result": "vi",
-    "unit_number": [10, 20, 30, 40, 500, 60, 70]
+    "unit_number": [10, 20, 30, 40, 500, 60, 70],
+    "hz_num": [50, 200, 100, 100, 100, 100, 200]
 }

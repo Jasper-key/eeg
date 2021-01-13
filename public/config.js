@@ -8,5 +8,6 @@ window.globals = {
         ["算法二", "two_result"],
         ["算法三", "three_result"]
     ],
-    "known_result": "labels"
+    "known_result": "labels",
+    "unit_numnwe": [10, 20, 30, 40, 50, 60, 70]
 }

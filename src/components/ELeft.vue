@@ -123,7 +123,7 @@ export default {
           // axisLine: false,
           splitLine: false,
           // Y轴name
-          name: "50μV",
+          name: this.$datas.unit_numnwe[i] + "μV",
           nameTextStyle: {
             color: "#A3A3A3",
             fontWeight: 100,

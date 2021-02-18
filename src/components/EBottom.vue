@@ -99,8 +99,12 @@ export default {
         },
         legend: {
           type: "plain",
-          itemHeight: 15,
-          itemWidth: 15,
+          itemHeight: 20,
+          itemWidth: 20,
+          formatter: function(name) {
+            item_num_value = 0;
+            return name;
+          },
           data: [
             {
               name: "已知结果",
@@ -127,15 +131,28 @@ export default {
             minSpan: 10,
           },
         ],
-        grid: {
-          top: 0,
-          left: "5%",
-          bottom: 0,
-          height: "85%",
-          width: "95%",
-          show: true,
-          backgroundColor: "#444549",
-        },
+        grid: [
+          // 主要坐标画布
+          {
+            top: "10%",
+            left: "5%",
+            bottom: 0,
+            height: "75%",
+            width: "95%",
+            show: true,
+            // backgroundColor: "#444549",
+          },
+          // 背景颜色
+          {
+            top: 0,
+            left: "5%",
+            bottom: 0,
+            height: "85%",
+            width: "95%",
+            show: true,
+            backgroundColor: "#444549",
+          },
+        ],
         xAxis: {
           type: "category",
           data: this.countNumber(this.b_known_data.length),
@@ -163,7 +180,7 @@ export default {
         yAxis: {
           type: "value",
           min: 1,
-          max: 7,
+          max: 6,
           axisLabel: {
             margin: 20,
             fontWeight: "bolder",
@@ -223,6 +240,11 @@ export default {
           },
         ],
       });
+
+      // 点击时间
+      // bChart.on('click', function (params) {
+      //         alert(params.name);
+      //     });
     },
     set_value(e) {
       alert(e);
@@ -241,8 +263,8 @@ export default {
       return tempNumber;
     },
     mousedown: function() {
-      if( item_num_value != 0){
-        this.$emit('b_set_item_num', item_num_value);
+      if (item_num_value != 0) {
+        this.$emit("b_set_item_num", item_num_value);
       }
     },
   },

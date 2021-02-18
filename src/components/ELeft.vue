@@ -1,5 +1,19 @@
 <template>
   <div class="l-mian">
+    <!-- 控制uv 和 点数 的模块 -->
+    <div class="l-float">
+      <input type="button" value="⚙" @click="contro_shade()" class="float-bottom"/>
+      <div class="float-shade" v-for="(v, k) in unit_number" :key="k" v-show="on_off == 1">
+        <div>
+          <span>μv值：</span><input class="shade-input" v-model="unit_number[k]" type="number"/>
+        </div>
+        <div>
+          <span>点数值：</span><input class="shade-input" v-model="hz_num[k]" type="number"/>
+        </div>
+      </div>
+        <button v-show="on_off == 1" @click="drawLine()" class="float-button">确定</button>
+    </div>
+    <!-- 主体 -->
     <div class="l-left">
       <div v-for="k in 7" :key="k" class="left-title">
         <span>{{ k }}</span>
@@ -23,6 +37,9 @@ export default {
     return {
       left_title_data: this.$datas.mark_7,
       font_colors: ["#3c3c3c", "#FFFFFF"],
+      unit_number: this.$datas.unit_number,
+      hz_num: this.$datas.hz_num,
+      on_off: 0
     };
   },
   props: {
@@ -43,9 +60,22 @@ export default {
         this.drawLine();
       },
     },
+    // unit_number: {
+    //   deep: true,
+    //   handler() {
+    //     this.drawLine();
+    //   },
+    // },
+    // hz_num: {
+    //   deep: true,
+    //   handler() {
+    //     this.drawLine();
+    //   },
+    // },
   },
   methods: {
     drawLine() {
+      console.log(this.unit_number);
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("l-right"));
       // 绘制图表
@@ -111,7 +141,7 @@ export default {
           gridIndex: i,
           type: "category",
           axisLine: false,
-          data: this.categoryNumberHz(this.$datas.hz_num[i]),
+          data: this.categoryNumberHz(this.hz_num[i]),
         };
         xAxis_arr.push(xAxis_temp);
 
@@ -120,12 +150,12 @@ export default {
           gridIndex: i,
           type: "value",
           offset: 10,
-          min: -(this.$datas.unit_number[i] / 2),
-          max: this.$datas.unit_number[i] / 2,
+          min: -(this.unit_number[i] / 2),
+          max: this.unit_number[i] / 2,
           // axisLine: false,
           splitLine: false,
           // Y轴name
-          name: this.$datas.unit_number[i] + "μV",
+          name: this.unit_number[i] + "μV",
           nameTextStyle: {
             color: "#A3A3A3",
             fontWeight: 100,
@@ -248,6 +278,15 @@ export default {
       var filled = Array.from(Array(30 * e), (v, k) => k + 1);
       return filled;
     },
+    contro_shade() {
+      var temp_on_off = this.on_off;
+      if (temp_on_off == 0){
+        this.on_off = 1;
+      }else {
+        this.on_off = 0;
+      }
+
+    }
   },
 };
 </script>
@@ -283,6 +322,7 @@ export default {
   width: 100%;
   height: 9.57vh;
   line-height: 9.57vh;
+  font-size: 2vh;
   padding-left: 10%;
 }
 .line-point {
@@ -292,5 +332,29 @@ export default {
   margin: 0 10%;
   background-color: #006ed1;
   vertical-align: middle;
+}
+.l-float {
+  position: absolute;
+  width: 10%;
+  z-index: 999;
+}
+.float-bottom {
+  width: 10%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+.float-shade {
+  width: 100%;
+  height: 9.57vh;
+  background-color: #ffffff;
+  font-size: 1.5vh;
+  text-align:right;
+}
+.shade-input {
+  width: 30%;
+}
+.float-button {
+  float: right;
 }
 </style>
